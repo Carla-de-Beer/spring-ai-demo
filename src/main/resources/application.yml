@@ -2,6 +2,10 @@ spring:
   application:
     name: spring-ai-demo
 
+  jpa:
+    hibernate:
+      ddl-auto: update
+
   ai:
     openai:
       api-key: OPEN_AI_API_KEY
@@ -29,12 +33,11 @@ app:
     ai:
       prompt-templates:
         system-templates:
-          insurance-company-template: classpath:/prompttemplates/systemprompts/insurance-company-template.st
           estate-agent-search-template: classpath:/prompttemplates/systemprompts/estate-agent-search-template.st
           fruit-tree-location-template: classpath:/prompttemplates/systemprompts/fruit-tree-location-template.st
           fruit-tree-info-template: classpath:/prompttemplates/systemprompts/fruit-tree-info-template.st
-        user-templates:
-          email-template: classpath:/prompttemplates/userprompts/email-prompt-template.st
+          insurance-company-template: classpath:/prompttemplates/systemprompts/insurance-company-template.st
+          service-request-template: classpath:/prompttemplates/systemprompts/service-request-template.st
 
 logging:
   level:

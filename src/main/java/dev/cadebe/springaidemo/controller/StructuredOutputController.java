@@ -1,5 +1,8 @@
 package dev.cadebe.springaidemo.controller;
 
+import dev.cadebe.springaidemo.springai.config.TemplateConfig;
+import dev.cadebe.springaidemo.model.FruitTreeInfo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.ParameterizedTypeReference;
@@ -10,10 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import dev.cadebe.springaidemo.config.springai.TemplateConfig;
-import dev.cadebe.springaidemo.model.FruitTreeInfo;
-import lombok.extern.slf4j.Slf4j;
-
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Slf4j
@@ -22,6 +22,7 @@ import java.util.List;
 public class StructuredOutputController {
 
     static final String API_PREFIX = "/api";
+    static final String STRUCTURED_OUTPUT_PATH = "/structured-output";
 
     private final ChatClient chatClient;
     private final TemplateConfig templateConfig;
@@ -32,9 +33,10 @@ public class StructuredOutputController {
         this.templateConfig = templateConfig;
     }
 
-    @GetMapping("/structured-output")
-    public ResponseEntity<?> chat(@RequestParam("location") String location) {
-        if (location == null || location.isBlank()) {
+    @SuppressWarnings("java:S1452")
+    @GetMapping(STRUCTURED_OUTPUT_PATH)
+    public ResponseEntity<?> chat(@NotNull @RequestParam("location") String location) {
+        if (location.isBlank()) {
             return ResponseEntity.badRequest()
                     .body("Provide a valid geographic location.");
         }
@@ -43,7 +45,7 @@ public class StructuredOutputController {
                 .prompt()
                 .user(location)
                 .user(promptTemplateSpec -> promptTemplateSpec
-                        .text(templateConfig.getSystemTemplates().getFruitTreeInfoTemplate())
+                        .text(templateConfig.getSystemTemplates().getFruitTreeLocationTemplate())
                         .param("location", location))
                 .call()
                 .content();

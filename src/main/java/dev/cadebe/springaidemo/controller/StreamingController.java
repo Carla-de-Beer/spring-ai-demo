@@ -14,10 +14,11 @@ import reactor.core.publisher.Flux;
 public class StreamingController {
 
     static final String API_PREFIX = "/api";
+    private static final String STREAM_PATH = "/stream";
 
     private final ChatClient chatClient;
 
-    @GetMapping("/stream")
+    @GetMapping(STREAM_PATH)
     public Flux<String> stream(@RequestParam("message") String message) {
         return chatClient.prompt()
                 .user(message)

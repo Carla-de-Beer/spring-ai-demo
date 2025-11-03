@@ -1,0 +1,209 @@
+{
+  "info": {
+    "_postman_id": "739c4d46-f3ab-4c22-9653-7d6285cfdc13",
+    "name": "spring-ai-demo",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "7484234"
+  },
+  "item": [
+    {
+      "name": "Chat memory",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"Response body is not empty\", function () {",
+              "    var body = pm.response.text();",
+              "    pm.expect(body && body.trim().length).to.be.above(0);",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "username",
+            "value": "new-user-2",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/chat-memory?message=My name is Rose",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "chat-memory"
+          ],
+          "query": [
+            {
+              "key": "message",
+              "value": "My name is Rose"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "System template",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"Response body is not empty\", function () {",
+              "    var body = pm.response.text();",
+              "    pm.expect(body && body.trim().length).to.be.above(0);",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/chat?message=I want to buy an accessible holiday appartment with outdoor space that can reach with public transport",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "chat"
+          ],
+          "query": [
+            {
+              "key": "message",
+              "value": "I want to buy an accessible holiday appartment with outdoor space that can reach with public transport"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Structured output (with system template)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"Response body is not empty\", function () {",
+              "    var body = pm.response.text();",
+              "    pm.expect(body && body.trim().length).to.be.above(0);",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/structured-output?location=Provence",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "structured-output"
+          ],
+          "query": [
+            {
+              "key": "location",
+              "value": "Provence"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Service request (JDBC tooling example)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"Response body is not empty\", function () {",
+              "    var body = pm.response.text();",
+              "    pm.expect(body && body.trim().length).to.be.above(0);",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "username",
+            "value": "Jasmine",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/service-request?message=My computer screen is cracked",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "service-request"
+          ],
+          "query": [
+            {
+              "key": "message",
+              "value": "My computer screen is cracked"
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "http://localhost:8080/api/",
+      "value": "",
+      "type": "default"
+    }
+  ]
+}

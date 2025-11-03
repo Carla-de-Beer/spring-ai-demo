@@ -16,6 +16,7 @@ import static org.springframework.ai.chat.memory.ChatMemory.CONVERSATION_ID;
 public class ChatMemoryController {
 
     static final String API_PREFIX = "/api";
+    private static final String CHAT_MEMORY_PATH = "/chat-memory";
 
     private final ChatClient chatClient;
 
@@ -23,7 +24,7 @@ public class ChatMemoryController {
         this.chatClient = chatClient;
     }
 
-    @GetMapping("/chat-memory")
+    @GetMapping(CHAT_MEMORY_PATH)
     public ResponseEntity<String> chatMemory(@RequestHeader("username") String username, @RequestParam("message") String message) {
 
         String result = chatClient
@@ -36,8 +37,7 @@ public class ChatMemoryController {
                 .advisors(advisorSpec -> advisorSpec.param(CONVERSATION_ID, username))
                 .call()
                 .content(); // just the response as string
-        // .chatClientResponse(); // if you wish to output the metadata to the prompt - usefuul for RAG
-        // call together with the content
+        // .chatClientResponse(); // if you wish to output the metadata to the prompt - useful for RAG
 
         return ResponseEntity.ok(result);
     }

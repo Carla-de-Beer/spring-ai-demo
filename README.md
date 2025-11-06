@@ -19,7 +19,7 @@ The demo includes:
 User → Controller (REST) → ChatClient (Spring AI) → Model/Tool (OpenAI/Claude/Mistral) → Response
 ```
 
-Endpoints use Spring AI's ChatClient, optionally with tools, memory, and prompt templates. 
+Endpoints use Spring AI's ChatClient, optionally with tools, memory, and prompt templates.
 Tool endpoints extract structured data from user input and create records in the database.
 
 ## What this project demonstrates
@@ -42,11 +42,10 @@ Tool endpoints extract structured data from user input and create records in the
 
 ### Environment Variables
 
-| Variable                        | Default/Example                | Description                        |
-|----------------------------------|-------------------------------|------------------------------------|
-| SPRING_AI_OPENAI_API_KEY        | `test-key`                    | API key for OpenAI-compatible API  |
-| SPRING_AI_OPENAI_BASE_URL       | `http://localhost:12434/engines` | Base URL for model API         |
-
+| Variable                  | Default/Example                  | Description                       |
+|---------------------------|----------------------------------|-----------------------------------|
+| SPRING_AI_OPENAI_API_KEY  | `test-key`                       | API key for OpenAI-compatible API |
+| SPRING_AI_OPENAI_BASE_URL | `http://localhost:12434/engines` | Base URL for model API            |
 
 ## Configuration
 
@@ -57,7 +56,7 @@ Key properties:
 - `spring.ai.openai.api-key` — the API key to use (the YAML shows `OPEN_AI_API_KEY` placeholder).
 - `spring.ai.openai.base-url` — base URL for your OpenAI-compatible provider (default in this project: `http://localhost:12434/engines`).
 - `spring.ai.chat.options.model` — the default model name used (config uses `ai/mistral`); change it to a model your provider exposes.
- - To use Claude Sonnet 3.5, set `spring.ai.chat.options.model=claude-sonnet-3.5` in your `application.yml` or as an environment variable.
+- To use Claude Sonnet 3.5, set `spring.ai.chat.options.model=claude-sonnet-3.5` in your `application.yml` or as an environment variable.
 - H2 datasource properties for chat memory are configured in the YAML and persist to `~/chatmemory` by default.
 
 You can override properties with environment variables. Example (macOS / zsh):
@@ -99,11 +98,11 @@ All endpoints are under `/api`.
   Asks the model for structured JSON describing fruit trees in a given location and attempts to bind the JSON to `FruitTreeInfo` records. Returns JSON.
 
 - GET /api/service-request (headers: `username`, param: `message`)
-  - Uses a tool-enabled ChatClient to extract a structured service request from user input and create a record in the database.
-  - Example:
-    ```bash
-    curl -X GET -H "username: alice" "http://localhost:8080/api/service-request?message=My laptop is broken and I need urgent help"
-    ```
+    - Uses a tool-enabled ChatClient to extract a structured service request from user input and create a record in the database.
+    - Example:
+      ```bash
+      curl -X GET -H "username: alice" "http://localhost:8080/api/service-request?message=My laptop is broken and I need urgent help"
+      ```
 
 Example curl call (chat):
 
@@ -137,10 +136,130 @@ Matching Postman-based queries can be found here: ./postman-requests/spring-ai.p
 ## Running Tests
 
 Run all tests:
+
 ```bash
 ./mvnw test
 ```
+
 Unit and integration tests cover controller, tool, and service logic.
+
+## Metrics and Observability
+
+Spring Boot actuator can be used to keep track of the AI usage.
+
+http://localhost:8080/actuator/metrics/spring.ai.advisor
+
+```json
+{
+  "name": "spring.ai.advisor",
+  "baseUnit": "seconds",
+  "measurements": [
+    {
+      "statistic": "COUNT",
+      "value": 10
+    },
+    {
+      "statistic": "TOTAL_TIME",
+      "value": 39.871138705999996
+    },
+    {
+      "statistic": "MAX",
+      "value": 2.608116833
+    }
+  ],
+  "availableTags": [
+    {
+      "tag": "gen_ai.operation.name",
+      "values": [
+        "framework"
+      ]
+    },
+    {
+      "tag": "spring.ai.kind",
+      "values": [
+        "advisor"
+      ]
+    },
+    {
+      "tag": "spring.ai.advisor.name",
+      "values": [
+        "SimpleLoggerAdvisor",
+        "call",
+        "TokenUsageAuditAdvisor"
+      ]
+    },
+    {
+      "tag": "error",
+      "values": [
+        "none"
+      ]
+    },
+    {
+      "tag": "gen_ai.system",
+      "values": [
+        "spring_ai"
+      ]
+    }
+  ]
+}
+```
+
+http://localhost:8080/actuator/metrics/gen_ai.client.token.usage
+
+```json
+{
+  "name": "gen_ai.client.token.usage",
+  "description": "Measures number of input and output tokens used",
+  "measurements": [
+    {
+      "statistic": "COUNT",
+      "value": 5132
+    }
+  ],
+  "availableTags": [
+    {
+      "tag": "gen_ai.operation.name",
+      "values": [
+        "chat"
+      ]
+    },
+    {
+      "tag": "gen_ai.response.model",
+      "values": [
+        "ai/mistral"
+      ]
+    },
+    {
+      "tag": "gen_ai.request.model",
+      "values": [
+        "ai/mistral"
+      ]
+    },
+    {
+      "tag": "gen_ai.token.type",
+      "values": [
+        "output",
+        "input",
+        "total"
+      ]
+    },
+    {
+      "tag": "gen_ai.system",
+      "values": [
+        "openai"
+      ]
+    }
+  ]
+}
+```
+
+Prometheus can be used by executing the docker-compoyse.yml file and calling: http://localhost:9090/query
+
+![Prometheus table](doc/assets/prometheus-table.png)
+
+![Prometheus graph](doc/assets/prometheus-graph.png)
+
+![Grafana dashboardh](doc/assets/grafana-dashboard.png)
 
 ## Troubleshooting
 

@@ -44,3 +44,9 @@ logging:
     org:
       springframework:
         ai: DEBUG
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, metrics, prometheus
